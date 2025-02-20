@@ -1,0 +1,35 @@
+﻿@model List<MultiApp.Models.Sala>
+
+
+<h2>Sale e Biglietti Venduti</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome Sala</th>
+            <th>Biglietti Venduti</th>
+            <th>Biglietti Ridotti</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sala in Model)
+        {
+            <tr>
+                <td>@sala.Nome</td>
+                <td>@sala.BigliettiVenduti / @sala.CapienzaMassima</td>
+                <td>@sala.BigliettiRidottiVenduti</td>
+                <td>
+                    <form method="post" action="/Biglietti/AggiungiBiglietto" class="d-inline">
+                        <input type="hidden" name="sala" value="@sala.Nome">
+                        <button type="submit" class="btn btn-success btn-sm">Aggiungi</button>
+                    </form>
+
+                    <form method="post" action="/Biglietti/RimuoviBiglietto" class="d-inline">
+                        <input type="hidden" name="sala" value="@sala.Nome">
+                        <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,87 @@
+﻿@using MultiApp.Models
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<MultiApp.Models.Sala>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prenotazione Biglietti</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+
+    <h1>Vendita Biglietti Cinema</h1>
+    <h2>Sale Disponibili</h2>
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var sala in Model)
+        {
+            <p>@sala.Nome - Biglietti Venduti: @sala.BigliettiVenduti</p>
+        }
+        <form method="post" action="/Prenotazione/Prenota">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required><br>
+
+            <label for="cognome">Cognome:</label>
+            <input type="text" id="cognome" name="cognome" required><br>
+
+            <label for="sala">Sala:</label>
+            <select id="sala" name="sala">
+                @foreach (var sala in Model)
+                {
+                    <option value="@sala.Nome">@sala.Nome</option>
+                }
+            </select><br>
+
+            <label for="tipoBiglietto">Tipo Biglietto:</label>
+            <select id="tipoBiglietto" name="tipoBiglietto">
+                <option value="intero">Intero</option>
+                <option value="ridotto">Ridotto</option>
+            </select><br>
+
+            <button type="submit">Prenota</button>
+        </form>
+
+        <h2>Sale e Biglietti Venduti</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome Sala</th>
+                    <th>Biglietti Venduti</th>
+                    <th>Biglietti Ridotti</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sala in Model)
+                {
+                    <tr>
+                        <td>@sala.Nome</td>
+                        <td>@sala.BigliettiVenduti / @sala.CapienzaMassima</td>
+                        <td>@sala.BigliettiRidottiVenduti</td>
+                        <td>
+                            <form method="post" action="/Biglietti/AggiungiBiglietto" class="d-inline">
+                                <input type="hidden" name="sala" value="@sala.Nome">
+                                <button type="submit" class="btn btn-success btn-sm">Aggiungi</button>
+                            </form>
+                            <form method="post" action="/Biglietti/RimuoviBiglietto" class="d-inline">
+                                <input type="hidden" name="sala" value="@sala.Nome">
+                                <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+
+</body>
+</html>
+
+
+
+    
